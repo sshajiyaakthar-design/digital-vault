@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="fade-in">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h1 class="h3 fw-bold mb-1"><i class="bi bi-people me-2"></i>Users</h1>
+      <div class="muted">Suspend or re-activate accounts.</div>
+    </div>
+    <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('admin.dashboard') }}"><i class="bi bi-arrow-left me-1"></i>Back</a>
+  </div>
+
+  <div class="card p-3">
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th style="width: 180px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in users_list %}
+            <tr>
+              <td class="fw-semibold">{{ u.email }}</td>
+              <td>{{ u.role }}</td>
+              <td>
+                {% if u.is_suspended %}
+                  <span class="badge text-bg-danger"><i class="bi bi-x-circle me-1"></i>Suspended</span>
+                {% else %}
+                  <span class="badge text-bg-success"><i class="bi bi-check-circle me-1"></i>Active</span>
+                {% endif %}
+              </td>
+              <td>
+                <form method="post" action="{{ url_for('admin.toggle_suspension', user_id=u.id) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <button class="btn btn-sm {{ 'btn-success' if u.is_suspended else 'btn-warning' }}" type="submit">
+                    {{ 'Re-activate' if u.is_suspended else 'Suspend' }}
+                  </button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

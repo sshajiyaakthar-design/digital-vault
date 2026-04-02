@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="fade-in">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h1 class="h3 fw-bold mb-1"><i class="bi bi-bell me-2"></i>Notifications</h1>
+      <div class="muted">Unlock alerts and system messages.</div>
+    </div>
+    <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('capsules.dashboard') }}"><i class="bi bi-arrow-left me-1"></i>Back</a>
+  </div>
+
+  <div class="card p-3">
+    {% if notifications|length == 0 %}
+      <div class="muted">No notifications yet.</div>
+    {% endif %}
+
+    <div class="d-flex flex-column gap-2">
+      {% for n in notifications %}
+        <div class="card p-3 {% if n.read_at_utc is none %}border-primary{% else %}opacity-90{% endif %}">
+          <div class="d-flex align-items-start justify-content-between gap-2">
+            <div>
+              <div class="fw-semibold">{{ n.kind.replace('_', ' ').title() }}</div>
+              <div class="muted small">{{ n.created_at_utc.strftime('%Y-%m-%d %H:%M') }} UTC</div>
+            </div>
+            {% if n.read_at_utc is none %}
+              <span class="badge text-bg-primary"><i class="bi bi-eye me-1"></i>New</span>
+            {% else %}
+              <span class="badge text-bg-secondary">Read</span>
+            {% endif %}
+          </div>
+          <div class="mt-2">{{ n.message }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+

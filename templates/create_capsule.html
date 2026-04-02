@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center fade-in">
+  <div class="col-12 col-lg-8">
+    <div class="card p-4 shadow-sm">
+      <div class="d-flex align-items-start justify-content-between mb-3">
+        <div>
+          <h1 class="h3 fw-bold mb-1"><i class="bi bi-plus-circle me-2"></i>Create a Capsule</h1>
+          <div class="muted">Set an unlock time. Content stays locked until the server says it’s time.</div>
+        </div>
+        <div class="text-end muted small">
+          Max upload: {{ (config.MAX_CONTENT_LENGTH // 1024 // 1024) if config and config.MAX_CONTENT_LENGTH else 20 }} MB
+        </div>
+      </div>
+
+      <form method="post" enctype="multipart/form-data" id="capsuleForm">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+          {{ form.title.label(class="form-label") }}
+          {{ form.title(class="form-control", placeholder="e.g. My future self", maxlength=200) }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.message.label(class="form-label") }}
+          {{ form.message(class="form-control", rows="5", placeholder="Write a message to yourself...") }}
+        </div>
+
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="form-label">Unlock time (your local)</label>
+            <input
+              type="datetime-local"
+              name="unlock_local"
+              id="unlockLocal"
+              class="form-control"
+              value="{{ form.unlock_local.data or '' }}"
+              required
+            >
+            <div class="form-text muted">Unlock time is converted to UTC on the server and enforced there.</div>
+          </div>
+          <div class="col-12 col-md-6">
+            {{ form.client_tz_offset_minutes }}
+            <div class="muted small mt-2">
+              Timezone offset is captured automatically in your browser. You can also adjust by reloading if needed.
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="mb-3">
+          <label class="form-label">Upload files (optional)</label>
+          <input
+            class="form-control"
+            type="file"
+            name="files"
+            multiple
+            accept=".png,.jpg,.jpeg,.gif,.webp,.mp3,.wav,.ogg,.mp4,.webm,.pdf,.txt,.doc,.docx"
+          >
+          <div class="form-text muted">
+            Supported: images, audio, video, and documents. Server validates type and size.
+          </div>
+        </div>
+
+        <button class="btn btn-primary w-100" type="submit"><i class="bi bi-lock me-2"></i>Create Locked Capsule</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    // JS returns minutes behind UTC. Convert to minutes ahead of UTC (sign flip).
+    const hidden = document.querySelector('input[name="client_tz_offset_minutes"]');
+    if (hidden) {
+      const tzOffset = -new Date().getTimezoneOffset(); // minutes
+      hidden.value = tzOffset;
+    }
+  })();
+</script>
+{% endblock %}
+

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="fade-in">
+  <div class="card p-4 shadow-sm">
+    <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+      <div>
+        <div class="muted small">Shared Capsule • Unlocked</div>
+        <h1 class="h3 fw-bold mt-1 mb-2">{{ capsule.title }}</h1>
+      </div>
+      <div class="text-end">
+        <span class="badge text-bg-success"><i class="bi bi-unlock me-1"></i>Ready</span>
+      </div>
+    </div>
+
+    {% if capsule.message %}
+      <div class="mt-4 p-3 rounded-3" style="background: rgba(79, 70, 229, .08);">
+        <div class="muted small mb-1">Message</div>
+        <div style="white-space: pre-wrap;">{{ capsule.message }}</div>
+      </div>
+    {% endif %}
+
+    <hr class="my-4">
+
+    {% if files|length > 0 %}
+      <h3 class="h5 fw-bold">Attached memories</h3>
+      <div class="row g-3 mt-1">
+        {% for f in files %}
+          <div class="col-12">
+            <div class="card p-3 h-100">
+              <div class="d-flex align-items-start justify-content-between gap-2">
+                <div class="fw-semibold">{{ f.original_filename }}</div>
+                <div class="muted small">{{ f.file_category|capitalize }}</div>
+              </div>
+              <div class="mt-3">
+                {% if f.file_category == 'image' %}
+                  <img class="img-fluid rounded" style="max-height: 520px; object-fit: contain; background: rgba(0,0,0,.04);" src="{{ url_for('share.shared_capsule_file', token=token, file_id=f.id) }}" alt="{{ f.original_filename }}">
+                {% elif f.file_category == 'audio' %}
+                  <audio controls style="width: 100%;">
+                    <source src="{{ url_for('share.shared_capsule_file', token=token, file_id=f.id) }}">
+                  </audio>
+                {% elif f.file_category == 'video' %}
+                  <video controls class="w-100 rounded" style="max-height: 520px; background: rgba(0,0,0,.04);">
+                    <source src="{{ url_for('share.shared_capsule_file', token=token, file_id=f.id) }}">
+                  </video>
+                {% else %}
+                  <a class="btn btn-primary" href="{{ url_for('share.shared_capsule_download', token=token, file_id=f.id) }}">
+                    <i class="bi bi-download me-1"></i>Download
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="muted">No files were attached.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+

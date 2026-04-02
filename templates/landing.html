@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row align-items-center g-4 fade-in">
+  <div class="col-lg-7">
+    <h1 class="display-5 fw-bold mb-3">Lock your memories. Open them when the time is right.</h1>
+    <p class="lead muted mb-4">
+      Create a Digital Capsule with text and files, set an unlock time, and experience it only after the lock releases.
+      The server enforces the unlock—no shortcuts.
+    </p>
+
+    <div class="d-flex gap-2 flex-wrap">
+      <a class="btn btn-primary btn-lg" href="{{ url_for('auth.register') }}"><i class="bi bi-lock me-2"></i>Get started</a>
+      <a class="btn btn-outline-light btn-lg" href="{{ url_for('auth.login') }}"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a>
+    </div>
+
+    <div class="mt-4">
+      <div class="d-flex align-items-start mb-3">
+        <i class="bi bi-shield-check fs-4 me-3"></i>
+        <div>
+          <div class="fw-semibold">Strict unlock enforcement</div>
+          <div class="muted">Locked capsule content is blocked in routes and file downloads.</div>
+        </div>
+      </div>
+      <div class="d-flex align-items-start mb-3">
+        <i class="bi bi-images fs-4 me-3"></i>
+        <div>
+          <div class="fw-semibold">Any memory, any format</div>
+          <div class="muted">Images, audio, video, and documents with server-side validation.</div>
+        </div>
+      </div>
+      <div class="d-flex align-items-start">
+        <i class="bi bi-bell fs-4 me-3"></i>
+        <div>
+          <div class="fw-semibold">Notifications</div>
+          <div class="muted">Unlock alerts are generated when the capsule becomes available.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card p-4 shadow-sm">
+      <h4 class="fw-bold mb-3"><i class="bi bi-hourglass-split me-2"></i>How it works</h4>
+      <ol class="muted">
+        <li>Create a capsule and set its unlock time.</li>
+        <li>Everything stays locked until the server time reaches the date.</li>
+        <li>When unlocked, open it and mark it as “opened”.</li>
+        <li>Optionally share a link after unlock.</li>
+      </ol>
+      <hr>
+      <p class="muted mb-0">Your data stays isolated per user with secure file routes.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
